@@ -33,7 +33,7 @@ function App() {
   // Difficulty state
   const difficulties = Array.from({ length: 10 }, (_, i) => ({
     label: `Difficulty ${i + 1}`,
-    speed: 1.5 + i * 0.1, // 1.5, 1.6, ..., 2.4
+    speed: 1.3 + i * 0.1, // 0.9, 1.0, ..., 1.8
     multiplier: 1 + (i + 1) * 0.1
   }));
   const [difficultyIdx, setDifficultyIdx] = useState(0);
