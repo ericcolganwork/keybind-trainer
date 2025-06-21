@@ -325,7 +325,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-xl bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
         <h1 className="text-3xl font-bold text-center text-white mb-6 drop-shadow">Keybind Trainer</h1>
         <div className="mb-6">
@@ -422,6 +422,17 @@ function App() {
           </div>
         )}
       </div>
+      {/* Buy Me a Coffee link */}
+      <a
+        href="https://www.buymeacoffee.com/yourusername"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-8 inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-semibold rounded-full shadow transition text-lg"
+        style={{ textDecoration: 'none' }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 17h16M5 17l1.5-9h11L19 17M8 17V7m8 10V7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="21" r="1" fill="#222"/></svg>
+        Buy Me a Coffee
+      </a>
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
