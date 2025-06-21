@@ -29,7 +29,6 @@ function App() {
   const SESSION_LENGTH = 180; // 3 minutes in seconds
   const [sessionActive, setSessionActive] = useState(false);
   const [sessionTime, setSessionTime] = useState(SESSION_LENGTH);
-  const [intervalId, setIntervalId] = useState(null);
 
   // Difficulty state
   const difficulties = Array.from({ length: 10 }, (_, i) => ({
@@ -55,6 +54,10 @@ function App() {
   // Sorting state for session details
   const [sortColumn, setSortColumn] = useState('');
   const [sortDirection, setSortDirection] = useState('asc');
+
+  // Timer/progress interval refs
+  const timerIntervalRef = React.useRef(null);
+  const progressIntervalRef = React.useRef(null);
 
   // Save configs to localStorage
   useEffect(() => {
@@ -103,36 +106,73 @@ function App() {
     setSessionActive(false);
     setSessionTime(SESSION_LENGTH);
     setProgress(0);
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
   };
 
-  // Session timer and progress
+  // Session timer (3 minutes)
   useEffect(() => {
-    if (!sessionActive) return;
-    if (intervalId) clearInterval(intervalId);
-    const id = setInterval(() => {
+    if (!sessionActive) {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+      return;
+    }
+    if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    timerIntervalRef.current = setInterval(() => {
       setSessionTime(prev => prev > 0 ? prev - 1 : 0);
     }, 1000);
-    setIntervalId(id);
-    return () => clearInterval(id);
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+    };
   }, [sessionActive]);
+
+  // Progress bar fill (difficulty-based)
+  useEffect(() => {
+    if (!sessionActive) {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      return;
+    }
+    if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    progressIntervalRef.current = setInterval(() => {
+      setProgress(prev => Math.min(prev + currentDifficulty.speed, 100));
+    }, 100);
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+    };
+  }, [sessionActive, currentDifficulty]);
 
   // End session if time runs out or bar fills up
   useEffect(() => {
     if (!sessionActive) return;
     if (sessionTime === 0 || progress >= 100) {
       setSessionActive(false);
-      if (intervalId) clearInterval(intervalId);
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
     }
   }, [sessionTime, progress, sessionActive]);
-
-  // Progress bar fill only during session, with difficulty speed
-  useEffect(() => {
-    if (!sessionActive) return;
-    const interval = setInterval(() => {
-      setProgress(prev => Math.min(prev + currentDifficulty.speed, 100));
-    }, 100);
-    return () => clearInterval(interval);
-  }, [sessionActive, currentDifficulty]);
 
   // Flash color state for prompt key
   const [flashColor, setFlashColor] = useState('');
@@ -141,6 +181,7 @@ function App() {
   useEffect(() => {
     if (!sessionActive) return;
     const handleKeyDown = (e) => {
+      if (e.repeat) return; // Prevent holding down a key
       const key = e.key.toLowerCase();
       setSessionDetails(prev => [
         ...prev,
