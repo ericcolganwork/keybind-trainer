@@ -207,8 +207,9 @@ function App() {
 
   const handleModalKeyAdd = (e) => {
     e.preventDefault();
-    const key = e.key.toLowerCase();
-    if (!modalKeys.includes(key) && /^[a-z0-9]$/.test(key) && modalKeys.length < 100) {
+    const key = e.key;
+    // Accept any single printable character except whitespace, and not already present
+    if (!modalKeys.includes(key) && key.length === 1 && !/\s/.test(key) && modalKeys.length < 100) {
       setModalKeys(prev => [...prev, key]);
     }
   };
