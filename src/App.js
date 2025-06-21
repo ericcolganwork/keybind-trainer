@@ -34,7 +34,7 @@ function App() {
   // Difficulty state
   const difficulties = Array.from({ length: 10 }, (_, i) => ({
     label: `Difficulty ${i + 1}`,
-    speed: 1 + (i + 1) * 0.1, // 1.1, 1.2, ... 2.0
+    speed: 1.5 + i * 0.1, // 1.5, 1.6, ..., 2.4
     multiplier: 1 + (i + 1) * 0.1
   }));
   const [difficultyIdx, setDifficultyIdx] = useState(0);
@@ -265,6 +265,14 @@ function App() {
     return sorted;
   }, [sessionDetails, sortColumn, sortDirection]);
 
+  // Show only wrong answers toggle
+  const [showOnlyWrong, setShowOnlyWrong] = useState(false);
+
+  const filteredSessionDetails = React.useMemo(() => {
+    if (!showOnlyWrong) return sortedSessionDetails;
+    return sortedSessionDetails.filter(entry => !entry.correct);
+  }, [sortedSessionDetails, showOnlyWrong]);
+
   const handleSort = (col) => {
     if (sortColumn === col) {
       setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
@@ -439,7 +447,22 @@ function App() {
       {showSessionDetails && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl p-8 min-w-[320px] max-w-[90vw] relative border border-slate-200 max-h-[80vh] overflow-y-auto">
+            {/* Always visible close button */}
+            <button
+              onClick={() => setShowSessionDetails(false)}
+              className="absolute top-3 right-3 bg-slate-300 hover:bg-slate-400 text-slate-800 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold shadow"
+              aria-label="Close"
+            >×</button>
             <h2 className="text-2xl font-bold mb-4 text-slate-800">Session Details</h2>
+            <label className="flex items-center gap-2 mb-4 text-slate-700">
+              <input
+                type="checkbox"
+                checked={showOnlyWrong}
+                onChange={e => setShowOnlyWrong(e.target.checked)}
+                className="accent-red-500"
+              />
+              Show only wrong answers
+            </label>
             <table className="w-full text-left mb-4">
               <thead>
                 <tr>
@@ -455,7 +478,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {sortedSessionDetails.map((entry, idx) => (
+                {filteredSessionDetails.map((entry, idx) => (
                   <tr key={idx} className={entry.correct ? 'bg-green-50' : 'bg-red-50'}>
                     <td className="py-1 px-2 font-mono">{entry.prompt.toUpperCase()}</td>
                     <td className="py-1 px-2 font-mono">{entry.pressed.toUpperCase()}</td>
@@ -464,7 +487,7 @@ function App() {
                 ))}
               </tbody>
             </table>
-            <button onClick={() => setShowSessionDetails(false)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded shadow">Close</button>
+            {/* Old close button removed, now always visible at top right */}
           </div>
         </div>
       )}
