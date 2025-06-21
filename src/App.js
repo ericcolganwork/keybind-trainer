@@ -4,7 +4,7 @@ function App() {
   // Configurations: [{ name: string, keys: [string] }]
   const [configs, setConfigs] = useState(() => {
     const saved = localStorage.getItem('keybindConfigs');
-    return saved ? JSON.parse(saved) : [{ name: 'Default', keys: ['f'] }];
+    return saved ? JSON.parse(saved) : [{ name: 'Default', keys: 'qwertasdfgzxcvb12345'.split('') }];
   });
   const [selectedConfigIdx, setSelectedConfigIdx] = useState(0);
 
