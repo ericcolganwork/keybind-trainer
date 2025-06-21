@@ -424,7 +424,7 @@ function App() {
       </div>
       {/* Buy Me a Coffee link */}
       <a
-        href="https://www.buymeacoffee.com/yourusername"
+        href="https://coff.ee/ericcolganz"
         target="_blank"
         rel="noopener noreferrer"
         className="mt-8 inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-semibold rounded-full shadow transition text-lg"
