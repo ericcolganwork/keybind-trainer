@@ -535,9 +535,9 @@ function App() {
         </div>
       )}
       {/* Audio element for success sound */}
-      <audio ref={successAudio} src="/success.wav" preload="auto" />
+      <audio ref={successAudio} src="success.wav" preload="auto" />
       {/* Audio element for fail sound */}
-      <audio ref={failAudio} src="/fail.mp3" preload="auto" />
+      <audio ref={failAudio} src="fail.mp3" preload="auto" />
     </div>
   );
 }
