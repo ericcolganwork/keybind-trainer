@@ -85,6 +85,29 @@ function GoogleAd() {
   );
 }
 
+// Vertical Ad Component
+function GoogleAdVertical({ adSlot }) {
+  const adRef = React.useRef(null);
+  React.useEffect(() => {
+    if (window.adsbygoogle && adRef.current) {
+      try {
+        window.adsbygoogle.push({});
+      } catch (e) {}
+    }
+  }, []);
+  return (
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block', width: 160, height: 600, margin: '32px 0' }}
+      data-ad-client="ca-pub-3733264783480060"
+      data-ad-slot={adSlot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      ref={adRef}
+    />
+  );
+}
+
 
 
   // Save configs to localStorage
@@ -353,8 +376,13 @@ function GoogleAd() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-xl bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-4 relative">
+      {/* Left Ad Banner */}
+      <div className="hidden lg:flex flex-col items-center absolute left-0 top-0 h-full z-10">
+        <GoogleAdVertical adSlot="1942370071" />
+      </div>
+      {/* Main Card */}
+      <div className="w-full max-w-xl bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 mx-auto">
         <h1 className="text-3xl font-bold text-center text-white mb-6 drop-shadow">Keybind Trainer</h1>
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
@@ -449,6 +477,10 @@ function GoogleAd() {
             </span>
           </div>
         )}
+      </div>
+      {/* Right Ad Banner */}
+      <div className="hidden lg:flex flex-col items-center absolute right-0 top-0 h-full z-10">
+        <GoogleAdVertical adSlot="5690043397" />
       </div>
       {/* Buy Me a Coffee link */}
       <a
