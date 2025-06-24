@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
   // Configurations: [{ name: string, keys: [string] }]
@@ -58,6 +58,34 @@ function App() {
   // Timer/progress interval refs
   const timerIntervalRef = React.useRef(null);
   const progressIntervalRef = React.useRef(null);
+
+  
+
+function GoogleAd() {
+  const adRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (window.adsbygoogle && adRef.current) {
+      try {
+        window.adsbygoogle.push({});
+      } catch (e) {}
+    }
+  }, []);
+
+  return (
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block', width: '100%', minHeight: 90 }}
+      data-ad-client="ca-pub-3733264783480060"
+      data-ad-slot="4684083488"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      ref={adRef}
+    />
+  );
+}
+
+
 
   // Save configs to localStorage
   useEffect(() => {
@@ -433,6 +461,7 @@ function App() {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 17h16M5 17l1.5-9h11L19 17M8 17V7m8 10V7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="21" r="1" fill="#222"/></svg>
         Buy Me a Coffee
       </a>
+      <GoogleAd />
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
